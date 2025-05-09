@@ -1,4 +1,4 @@
-def youtube_get_comments(driver, video_url, timeout=10, max_scrolls=5):
+def youtube_get_comments(driver, video_url, timeout=10, max_scrolls=2):
     from selenium.webdriver.common.by import By
     from selenium.webdriver.support.ui import WebDriverWait
     from selenium.webdriver.support import expected_conditions as EC
@@ -17,7 +17,7 @@ def youtube_get_comments(driver, video_url, timeout=10, max_scrolls=5):
         time.sleep(2)
         while scrolls < max_scrolls:
             driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
-            time.sleep(3) 
+            time.sleep(7) 
 
             new_height = driver.execute_script("return document.documentElement.scrollHeight")
             if new_height == last_height:
@@ -38,7 +38,11 @@ def youtube_get_comments(driver, video_url, timeout=10, max_scrolls=5):
                 author = "N/A"
 
             try:
-                text = thread.find_element(By.CSS_SELECTOR, "yt-formatted-string#content-text").text.strip()
+                content_element = thread.find_element(By.CSS_SELECTOR, "yt-attributed-string#content-text")
+                spans = content_element.find_elements(By.CSS_SELECTOR, "span")
+                text = " ".join([span.text.strip() for span in spans if span.text.strip()])
+                if not text:
+                    text = content_element.text.strip()
             except:
                 text = "N/A"
 
