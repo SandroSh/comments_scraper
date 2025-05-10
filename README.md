@@ -1,4 +1,4 @@
-# Social Media Scraper
+# Comments Scraper
 
 A modular web scraping tool built with Selenium to extract public comments from YouTube videos and save them as structured CSV files.
 
